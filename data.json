@@ -1,0 +1,8 @@
+{"@odata.context":"https://odata4.cbs.nl/CBS/84837NED/$metadata","value":
+    [{"name":"MeasureCodes","kind":"EntitySet","url":"MeasureCodes"},
+    {"name":"Dimensions","kind":"EntitySet","url":"Dimensions"},
+    {"name":"WijkenEnBuurtenGroups","kind":"EntitySet","url":"WijkenEnBuurtenGroups"},
+    {"name":"WijkenEnBuurtenCodes","kind":"EntitySet","url":"WijkenEnBuurtenCodes"},
+    {"name":"WoningkenmerkenCodes","kind":"EntitySet","url":"WoningkenmerkenCodes"},
+    {"name":"Observations","kind":"EntitySet","url":"Observations"},
+    {"name":"Properties","kind":"Singleton","url":"Properties"}]}
