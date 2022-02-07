@@ -1,0 +1,33 @@
+let data = {values: [
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+    {naam: "bla 1", num:"20041010"},
+]}
+
+
+let rows = data.values;
+
+
+let FormatNum = (num:string) => {
+    return num.slice(0,4)
+}
+
+let FilterObject = (rows: any) => {
+    for (let index = 0; index < rows.length; index++) {
+        rows[index]["year"] = FormatNum(rows[index]["num"]);
+    }
+    return rows;
+}
+
+
+var result = FilterObject(rows);
+console.log(result);
+
+
+// tabel genereren 
