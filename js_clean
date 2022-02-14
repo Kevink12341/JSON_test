@@ -1,12 +1,9 @@
 let cbs_link = "https://opendata.cbs.nl/ODataApi/odata/70072ned/UntypedDataSet?$filter=((substringof(%27NL%27,RegioS)))&$select=Perioden,+TotaleBevolking_1";
 let cbs_link2 = "https://odata4.cbs.nl/CBS/83878NED";
-
-// Data laden
-async function load_data() {
-    const response = await fetch(cbs_link);
-    const jsondata = await response.json();
-    var data = jsondata.value;
-}
+let cbs_link4 = "https://odata4.cbs.nl/CBS/84296NED";
+let cbs_link_1 = cbs_link4+"/Observations";
+let cbs_link_2 = cbs_link_1 +"/?$select=(Measure, Value)";
+let cbs_link_3 = cbs_link_1 + "/?$top=50";
 
 // Tabel generen
 function addTable(data) {
@@ -23,15 +20,14 @@ function addTable(data) {
     var tr = document.createElement('TR');
     tableBody.appendChild(tr);
 
-    for (i=0; i<keys.length; i++) {
-
-        var td =document.createElement("TD");
-        td.append(document.createTextNode(keys[i]))
-        tr.appendChild(td)
+    for (let i=0; i<keys.length; i++) {
+        var th =document.createElement("TH");
+        th.append(document.createTextNode(keys[i]))
+        tr.appendChild(th)
     }
 
     // Loop voor de data in de tabel  
-    for (var i=0; i < data.length; i++){
+    for (let i=0; i < data.length; i++){
         var tr = document.createElement('TR');
         tableBody.appendChild(tr);
 
@@ -49,20 +45,24 @@ function addTable(data) {
     myTableDiv.appendChild(table);
 }
 
-
-
-fetch(cbs_link).then((response) => {
+fetch(cbs_link_3).then((response) => {
     response.json().then((json) => {
         let data = json.value
 
         // filter values
+/*
+        let test2 = Object.keys(data[0])
+        let newData = data[0][test2[0]]
+        console.log('test2',test2)
+        console.log('test',newData)
+
         for (let index = 0; index < data.length; index++) {
             let row = data[index];
-            data[index]["jaar"] = row.Perioden.slice(0,4)
+            data[index]["Jaar"] = row.Perioden.slice(0,4)
         }
 
         console.log("Object after filters", data)
-
+*/
         // generate the table and place it in the html
         addTable(data)
 
