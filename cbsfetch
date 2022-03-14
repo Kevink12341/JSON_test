@@ -1,0 +1,16 @@
+
+
+import fetch from 'node-fetch'
+
+export var fetch_cbs = (link) => {
+
+    return fetch(link).then((response) => {
+        return response.json().then((json) => {
+            let data = json.value
+            return data
+        })
+    }).catch((error) => {
+        console.error("Couldnt fetch recource", error)
+    })
+    
+};
