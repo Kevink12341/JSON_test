@@ -1,19 +1,27 @@
 import fetch, { Headers } from "node-fetch";
 
+let cbs_link = "https://opendata.cbs.nl/ODataApi/odata/70072ned/UntypedDataSet?$filter=((substringof(%27NL%27,RegioS)))&$select=Perioden,+TotaleBevolking_1";
+let cbs_link2 = "https://odata4.cbs.nl/CBS/83878NED";
+let cbs_link4 = "https://odata4.cbs.nl/CBS/84296NED";
+let cbs_link_1 = cbs_link2+"/Observations";
+let cbs_link_2 = cbs_link_1 +"/?$select=(Measure, Value)";
+let cbs_link_3 = cbs_link_1 + "/?$top=10";
+let cbs_link_4 = "https://odata4.cbs.nl/CBS/84296NED/$metadata";
+
 var myHeaders = new Headers();
-  
- myHeaders.append("Accept", "json")
 
- var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
+myHeaders.append("Accept", "text"/"xml")
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
 };
-
 
 fetch("https://odata4.cbs.nl/CBS/83878NED/$metadata", requestOptions)
     .then(response => response.text())
     .then( (text) => {
+    //String filtering & cleaning
     let xml_cleanup1 = text.replace(/=/g,":")
     let xml_cleanup2 = xml_cleanup1.replace(/\/>/g, "");
     let xml_cleanup3 = xml_cleanup2.replace(/\>/g, "");
@@ -27,10 +35,37 @@ fetch("https://odata4.cbs.nl/CBS/83878NED/$metadata", requestOptions)
 
     let xml_final = xml_cleanup10.split("<")
 
+    let dataset_xml = [];
+    // code voor array specifiek op dataset die ik wil + wat ruimte
+    for (let i = 0; i<xml_final.length; i++) {
+        if(String(xml_final[i]).includes("Cbs.Ccb.MemModels")) {
+            dataset_xml.push(xml_final[i]);
+            if (xml_final[i] == dataset_xml[0]) {
+                for (let j = 1; j<20;j++){
+                    dataset_xml.push(xml_final[i+j])
+                }
+            }else break
+        }else continue
+    }
+    // code die onnodige data eruit haalt
+    for (let i=0; i<dataset_xml.length;i++){
+        if (String(dataset_xml[i]).includes("PropertyRef")) {
+            dataset_xml.splice(i,1)
+        }else break
+    }
+    // code die de overflow na de data eruit haalt
+    for (let i=0;i<dataset_xml.length;i++){
+        if (String(dataset_xml[i]).includes("/EntityType")){
+            dataset_xml.splice(i,20)
+        }
+    }
+    console.log("dataset1",dataset_xml)
+
+    // JSON voorbereiding
     let propertiesArr = []
-    for (let i = 0; i<xml_final.length; i++){
+    for (let i = 0; i<dataset_xml.length; i++){
         if (xml_final[i].startsWith("Property ") && xml_final[i].endsWith("\ ")) {
-            propertiesArr.push(xml_final[i]) }
+            propertiesArr.push(dataset_xml[i]) }
         else { continue}
     }
     let values = "{\"";
