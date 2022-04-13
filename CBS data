@@ -1,1 +1,46 @@
-/.
+import fetch, { Headers } from "node-fetch";
+
+var myHeaders = new Headers();
+  
+ myHeaders.append("Accept", "json")
+
+ var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+};
+
+
+fetch("https://odata4.cbs.nl/CBS/83878NED/$metadata", requestOptions)
+    .then(response => response.text())
+    .then( (text) => {
+    let xml_cleanup1 = text.replace(/=/g,":")
+    let xml_cleanup2 = xml_cleanup1.replace(/\/>/g, "");
+    let xml_cleanup3 = xml_cleanup2.replace(/\>/g, "");
+    let xml_cleanup4 = xml_cleanup3.replace(/\/Key/g, "");
+    let xml_cleanup5 = xml_cleanup4.replace(/Name/g, " \"Name\"");
+    let xml_cleanup6 = xml_cleanup5.replace(/Key/g,"")
+    let xml_cleanup7 = xml_cleanup6.replace(/<</g,"<")
+    let xml_cleanup8 = xml_cleanup7.replace(/\?/g,"")
+    let xml_cleanup9 = xml_cleanup8.replace("Type","\"Type\"")
+    let xml_cleanup10 = xml_cleanup9.replace("Nullable","\"Nullable\"")
+
+    let xml_final = xml_cleanup10.split("<")
+
+    let propertiesArr = []
+    for (let i = 0; i<xml_final.length; i++){
+        if (xml_final[i].startsWith("Property ") && xml_final[i].endsWith("\ ")) {
+            propertiesArr.push(xml_final[i]) }
+        else { continue}
+    }
+    let values = "{\"";
+    console.log("String:", String(propertiesArr[0]))
+    for (let i=0; i<String(propertiesArr[0].length);i++) {
+        if (String(propertiesArr[0]).charCodeAt(i) >= 65 && String(propertiesArr[0]).charCodeAt(i) <= 90){
+            values += String(propertiesArr[0])[i]
+        }else if (String(propertiesArr[0]).charCodeAt(i) >= 97 && String(propertiesArr[0]).charCodeAt(i) <= 122) {
+            values += String(propertiesArr[0])[i]
+        }else break
+    }
+    console.log(values)
+    })
