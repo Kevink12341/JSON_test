@@ -1,0 +1,3 @@
+
+
+(`Id`, `Measure`, `ValueAttribute`, `Value`, `Bouwjaarklasse`, `Woningkenmerken`, `Energielabelklasse`, `GebruiksOppervlakteklasse`, `Percentielen`, `Perioden`) 
