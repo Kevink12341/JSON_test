@@ -44,6 +44,8 @@ export const DB_create_variables = (data) => {
       case "Edm.Boolean":
         column_sql_types.push(IDtypes["Edm.Boolean"])
         break;
+      default:
+        console.log("Data Type not found")
     }
   }
 
