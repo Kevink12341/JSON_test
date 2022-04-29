@@ -2,7 +2,7 @@ import mysql from 'mysql';
 
 import { getRow } from './db_queries.js';
 
-let MysqlCredentials = {
+export const MysqlCredentials = {
   host: "localhost",
   user: "root",
   password: "",

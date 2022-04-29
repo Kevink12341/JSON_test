@@ -1,4 +1,3 @@
-import { request } from 'express';
 import fetch, { Headers } from 'node-fetch';
 import { xml_text_parse } from './XML_parse.js';
 
@@ -8,7 +7,7 @@ let cbs_link4 = "https://odata4.cbs.nl/CBS/84296NED";
 let cbs_link_1 = cbs_link2+"/Observations";
 let cbs_link_2 = cbs_link_1 +"/?$select=(Measure, Value)";
 let cbs_link_3 = cbs_link_1 + "/?$top=250";
-let cbs_link_4 = cbs_link2 + "/$metadata";
+let cbs_link_4 = cbs_link4 + "/$metadata";
 
 export const import_data = () => {    
     return fetch(cbs_link_3).then((response) => { 
