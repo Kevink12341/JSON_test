@@ -1,5 +1,4 @@
 import { DBConnection } from "./db_conn.js";
-import { xml_text_parse } from "./XML_parse.js";
 
 const IDtypes = {
   "Edm.Int64": "INT(64)", 
@@ -78,33 +77,31 @@ export const DB_create_variables = (data) => {
     if(i< Object.keys(CBS_tables_values_Object).length-1){
       CBS_Tables_Values += ","
     }
+
   }
 
 // Writes data to CBS_tables and creates a table with column names
 
-  if (cbs_data_exists == 0) {
-  let sql_CBS_tables = `INSERT INTO CBS_tables (${CBS_Tables_ColumnName}) VALUES (${CBS_Tables_Values})`;
-  DBConnection.query(sql_CBS_tables, function(err,result){
-    if (err) throw (err)
-  })
-  DBConnection.query(sql_create_db, function(err, result){
-    if (err) throw (err);
-    console.log("Table creation successful")
-  })
-} else console.log("data exists")
-  
+
+let sql_CBS_tables = `INSERT INTO CBS_tables (${CBS_Tables_ColumnName}) VALUES (${CBS_Tables_Values})`;
+
+let data_Array = []
+
+data_Array.push(sql_CBS_tables,sql_create_db,CBS_tables_values_Object)
+
+return data_Array
 };
 
-function cbs_Table_Data_Exists() {
-  let data_Exists = `SELECT EXISTS (SELECT 1 FROM CBS_tables WHERE tableName = '${CBS_tables_values_Object.tableName}' )`
-  return new Promise((resolve, reject) => {
+// function cbs_Table_Data_Exists(CBS_tables_values_Object) {
+//   let data_Exists = `SELECT EXISTS (SELECT 1 FROM CBS_tables WHERE tableName = '${CBS_tables_values_Object.tableName}' )`
+//   return new Promise((resolve, reject) => {
 
-    DBConnection.query(data_Exists, function(err,result){
-        if (err) {
-            reject(err)
-        }
-        resolve(result[0][Object.keys(result[0])])
-      })
-})};
+//     DBConnection.query(data_Exists, function(err,result){
+//         if (err) {
+//             reject(err)
+//         }
+//         resolve(result[0][Object.keys(result[0])])
+//       })
+// })};
 
-let cbs_data_exists = await cbs_Table_Data_Exists()
+// let cbs_data_exists = await cbs_Table_Data_Exists(CBS_tables_values_Objec)
