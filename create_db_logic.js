@@ -27,5 +27,5 @@ export const create_cbs_tables = () => {
         DBConnection.query(sql_string, function(err, result){
             if (err) throw (err);
     })
-} else return console.log(true)
+} else return true
 };

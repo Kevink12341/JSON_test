@@ -92,16 +92,29 @@ data_Array.push(sql_CBS_tables,sql_create_db,CBS_tables_values_Object)
 return data_Array
 };
 
-// function cbs_Table_Data_Exists(CBS_tables_values_Object) {
-//   let data_Exists = `SELECT EXISTS (SELECT 1 FROM CBS_tables WHERE tableName = '${CBS_tables_values_Object.tableName}' )`
-//   return new Promise((resolve, reject) => {
+export const cbs_Table_Data_Exists = (input_values) => {
+  let data = input_values[2].tableName
+  let data_Exists = `SELECT EXISTS (SELECT 1 FROM CBS_tables WHERE tableName = '${data}' )`
+  let returnvalue = new Promise((resolve, reject) => {
+    DBConnection.query(data_Exists, function(err,result){
+        if (err) {
+            reject(err)
+        }
+        resolve(result[0][Object.keys(result[0])])
+      })
+})
+return returnvalue
+};
 
-//     DBConnection.query(data_Exists, function(err,result){
-//         if (err) {
-//             reject(err)
-//         }
-//         resolve(result[0][Object.keys(result[0])])
-//       })
-// })};
-
-// let cbs_data_exists = await cbs_Table_Data_Exists(CBS_tables_values_Objec)
+export const check_Data_Exists_In_CBS_Tables = async (input_array, data_exists_value) => {
+  let QueryStr_input_data_CBS_tables = input_array[0];
+  let QueryStr_create_new_table = input_array[1];
+  if (await data_exists_value == 0) {
+    DBConnection.query(QueryStr_input_data_CBS_tables, function(err,result){
+      if (err) throw (err)
+    })
+    DBConnection.query(QueryStr_create_new_table, function(err,result){
+      if(err) throw  (err)
+    })
+  }
+};
