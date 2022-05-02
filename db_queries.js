@@ -12,3 +12,11 @@ export function getRow(id){
     })
   };
 
+export function getTable(databaselink){
+  return new Promise((resolve, reject) => {
+    DBConnection.query(`SELECT tableName FROM CBS_tables WHERE CBSdatabase = ${databaselink}`, function(err, result){
+      if (err) reject (err);
+      resolve(result);
+    })
+  })
+}
